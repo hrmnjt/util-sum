@@ -1,14 +1,5 @@
 #!/bin/bash
 
-################################################################################
-#                                                                              #
-# File Name   : loadArgs.sh                                                    #
-# Description : Script to dinamically load args with -- as variables           #
-# Date        : 2018-06-26                                                     #
-# Version     : 1.0                                                            #
-#                                                                              #
-################################################################################
-
 # Defining colors for stdout
 GREEN='\033[0;32m'       # Green color
 RED='\033[0;31m'         # Red color
@@ -18,17 +9,13 @@ printf "\n${GREEN}Calculating sum from system arguments${NC}"
 printf "\n\nServer: $(hostname)\nUser: $(whoami)"
 printf "\nBash version : $(bash --version)\n\n"
 
-printf "Executing: \n"
+printf "\n${GREEN}Executing: ${NC}\n"
 echo "bash your-script.sh $@"
 
 # Inform user about the usage of the script
 usage() {
+  printf "\n${RED}Execution stopped${NC}"
   printf "\n${RED}Usage:- bash your-script.sh space-separated-integers${NC}\n"
-}
-
-# Do a check if system arguments are integers
-check_for_integers() {
-
 }
 
 # calculate the sum of integers
@@ -39,17 +26,21 @@ sum_of_integers() {
   total_sum=0
   local input_array=$@
   for iterator in ${input_array[@]}; do
-    total_sum=$(expr ${total_sum} + ${iterator}) 
+    if [[ ${iterator} =~ ^-?[0-9]+$ ]]; then
+      total_sum=$(expr ${total_sum} + ${iterator})
+    else
+      printf "\n${RED}${iterator} is not an integer${NC}"
+      usage
+      break
+    fi
   done
+  echo "Total: ${total_sum}" 
 }
 
 # check args
 if [ $# -eq 0 ] ; then
   usage
+else 
+  sys_args="$@"
+  sum_of_integers ${sys_args} 2> /dev/null
 fi
-
-sys_args="$@"
-total_sum=0
-
-sum_of_integers ${sys_args} 2> /dev/null
-echo "Total: ${total_sum}" 

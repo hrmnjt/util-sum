@@ -5,6 +5,7 @@
 # Description : Script to print sum of space separated integers                #
 # Date        : 2019-02-23                                                     #
 # Version     : 1.0                                                            #
+# Github      : https://github.com/hrmnjt/util-sum                             #
 ################################################################################
 
 # Defining colors for stdout
